@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 5.3//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-5.3.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+        <!-- Automatically create or update the database schema -->
+        <property name="hbm2ddl.auto">update</property>
+
+        <!-- JDBC Database connection settings -->
+        <property name="hibernate.dialect">org.hibernate.dialect.OracleDialect</property>
+        <property name="hibernate.connection.url">jdbc:oracle:thin:@localhost:1521:xe</property>
+        <property name="hibernate.connection.username">system</property>
+        <property name="hibernate.connection.password">root</property>
+        <property name="hibernate.connection.driver_class">oracle.jdbc.driver.OracleDriver</property>
+        <!--property name="show_sql">true</property-->
+<!--        <mapping class="mapping.one_to_one.Person" />-->
+<!--        <mapping class="mapping.one_to_one.Passport" />-->
+<!--        <mapping class="first.app.Subject"/>-->
+<!--        <mapping class="one_to_many.Employees"/>-->
+<!--        <mapping class="one_to_many.Department"/>-->
+
+        <mapping class="pagination.Books"/>
+
+
+    </session-factory>
+</hibernate-configuration>
