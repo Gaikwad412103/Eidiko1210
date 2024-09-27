@@ -36,20 +36,20 @@ public class Main {
             int pageSize = 10;
             int firstResult = (pageNumber - 1) * pageSize;
 
-// Create a HQL query to retrieve Books 
-            String hql = "FROM books_details";
-            Query query = session.createQuery(hql);
+// Create a HQL query to retrieve Books
+            String hql = "FROM Books";
+            Query<Books> query = session.createQuery(hql, Books.class);
 
-// Set pagination parameters 
+// Set pagination parameters
             query.setFirstResult(firstResult);
             query.setMaxResults(pageSize);
 
-// Retrieve  from the database 
-            List<Books> list = query.list();
+// Retrieve  from the database
+            List<Books> list = query.getResultList();
 
-// Display Books on the current page 
-            for (Books books : list) {
-                System.out.println(books);
+// Display Books on the current page
+            for (Books a : list) {
+                System.out.println(a);
             }
 
 

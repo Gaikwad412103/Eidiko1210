@@ -15,25 +15,46 @@
     </properties>
 
     <dependencies>
-        <!-- Hibernate Core Dependency -->
+        <!-- Hibernate Core -->
         <dependency>
-            <groupId>org.hibernate</groupId>
+            <groupId>org.hibernate.orm</groupId>
             <artifactId>hibernate-core</artifactId>
-            <version>6.5.2.Final</version>
+            <version>6.2.7.Final</version>
         </dependency>
 
-        <!-- Oracle JDBC Driver -->
         <dependency>
             <groupId>com.oracle.database.jdbc</groupId>
             <artifactId>ojdbc6</artifactId>
             <version>11.2.0.4</version>
         </dependency>
 
-        <!-- Jakarta Persistence API -->
+
+        <!-- Jakarta Persistence API (JPA) -->
         <dependency>
             <groupId>jakarta.persistence</groupId>
             <artifactId>jakarta.persistence-api</artifactId>
             <version>3.1.0</version>
+        </dependency>
+
+        <!-- JBoss Logging (required by Hibernate) -->
+        <dependency>
+            <groupId>org.jboss.logging</groupId>
+            <artifactId>jboss-logging</artifactId>
+            <version>3.5.0.Final</version>
+        </dependency>
+
+        <!-- JAXB API (for XML binding, required by Hibernate for annotations and XML configurations) -->
+        <dependency>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+            <version>4.0.0</version>
+        </dependency>
+
+        <!-- JAXB Runtime -->
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+            <version>4.0.2</version>
         </dependency>
     </dependencies>
 
