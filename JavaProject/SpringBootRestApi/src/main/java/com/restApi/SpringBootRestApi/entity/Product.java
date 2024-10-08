@@ -23,7 +23,7 @@ public class Product {
     private String name;
     private String productType;
     private String productDetails;
-    private double prize;
+    private double price;
     @CreationTimestamp
     private LocalDate created_date;
 }

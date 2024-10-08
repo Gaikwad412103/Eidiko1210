@@ -8,29 +8,34 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/products")
 public class ProductController {
     private ProductService productService;
     @Autowired
     public ProductController(ProductService productService) {
         this.productService = productService;
     }
-    @PostMapping("/products/addProducts")
+    @PostMapping("/addProducts")
     public Product addProduct(@RequestBody Product product){
         return productService.addProduct(product);
     }
-    @GetMapping("/products/viewAllProducts")
+    @GetMapping("/viewAllProducts")
     public List<Product> viewAllProducts(){
         return productService.viewAllProducts();
     }
-    @DeleteMapping("/products/deleteProduct/{id}")
+    @DeleteMapping("/deleteProduct/{id}")
     public String deleteProduct(@PathVariable("id") long productId){
        productService.deleteProduct(productId);
        return "product Deleted Successfully";
     }
-    @GetMapping("/products/searchProduct/{name}")
+    @GetMapping("/searchProduct/{name}")
     public List<Product> searchProduct(@PathVariable("name") String productName){
         return productService.searchProduct(productName);
     }
-
+    @GetMapping("/discount/{id}")
+    public String discount(@PathVariable("id") long productId){
+        int discount=productService.discount(productId);
+        return "Discount of the given product is :"+discount+"%";
+    }
 
 }

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProductServiceImplementation implements ProductService {
@@ -34,5 +35,26 @@ public class ProductServiceImplementation implements ProductService {
     @Override
     public List<Product> searchProduct(String productName) {
         return productRepository.findByName(productName);
+    }
+
+    @Override
+    public int discount(long productId) {
+        Optional<Product> product=productRepository.findById(productId);
+        if(product.isEmpty() || product.get().getPrice()<=50){
+            return 0;
+        }
+        else if(product.get().getPrice()<=200){
+            return 5;
+        }
+        else if(product.get().getPrice()<=500){
+            return 10;
+        }
+        else if(product.get().getPrice()<=1000){
+            return 15;
+        }
+        else if(product.get().getPrice()<=2000){
+            return 20;
+        }
+        return 30;
     }
 }

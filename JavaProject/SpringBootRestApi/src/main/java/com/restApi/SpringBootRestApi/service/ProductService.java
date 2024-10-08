@@ -12,4 +12,6 @@ public interface ProductService {
     public void deleteProduct(long id);
 
     public List<Product> searchProduct(String productName);
+
+    public int discount(long productId);
 }
