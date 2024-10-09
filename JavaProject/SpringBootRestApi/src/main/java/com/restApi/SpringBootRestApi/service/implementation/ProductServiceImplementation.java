@@ -1,6 +1,7 @@
 package com.restApi.SpringBootRestApi.service.implementation;
 
 import com.restApi.SpringBootRestApi.entity.Product;
+import com.restApi.SpringBootRestApi.exception.ProductNotFoundException;
 import com.restApi.SpringBootRestApi.repository.ProductRepository;
 import com.restApi.SpringBootRestApi.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,19 +29,30 @@ public class ProductServiceImplementation implements ProductService {
     }
 
     @Override
-    public void deleteProduct(long id) {
+    public void deleteProduct(long id) throws ProductNotFoundException {
+        Optional<Product> product=productRepository.findById(id);
+        if(product.isEmpty()){
+            throw new ProductNotFoundException("Product is not exist!!");
+        }
         productRepository.deleteById(id);
     }
 
     @Override
-    public List<Product> searchProduct(String productName) {
+    public List<Product> searchProduct(String productName) throws ProductNotFoundException {
+        List<Product> product=productRepository.findByName(productName);
+        if(product.isEmpty()){
+            throw new ProductNotFoundException("Product is not exist!!");
+        }
         return productRepository.findByName(productName);
     }
 
     @Override
-    public int discount(long productId) {
+    public int discount(long productId) throws ProductNotFoundException {
         Optional<Product> product=productRepository.findById(productId);
-        if(product.isEmpty() || product.get().getPrice()<=50){
+        if(product.isPresent()){
+            throw new ProductNotFoundException("Product is not exist!!");
+        }
+        if(product.get().getPrice()<=50){
             return 0;
         }
         else if(product.get().getPrice()<=200){

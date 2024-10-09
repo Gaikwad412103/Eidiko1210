@@ -1,14 +1,19 @@
 package com.restApi.SpringBootRestApi.controller;
 
+import com.restApi.SpringBootRestApi.dto.UserDto;
+import com.restApi.SpringBootRestApi.dto.Userlogin;
 import com.restApi.SpringBootRestApi.entity.User;
+import com.restApi.SpringBootRestApi.exception.RecordExistException;
+import com.restApi.SpringBootRestApi.exception.UserNotFoundException;
 import com.restApi.SpringBootRestApi.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/user")
 public class UserController {
 
     private UserService userService;
@@ -17,16 +22,16 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/user/register")
-    public User registerUser(@RequestBody User user){
-        return userService.registerUser(user);
+    @PostMapping("/register")
+    public ResponseEntity<User> registerUser(@RequestBody @Valid UserDto userDto) throws RecordExistException {
+        return new ResponseEntity<>(userService.registerUser(userDto), HttpStatus.CREATED);
     }
-    @GetMapping("/user/login")
-    public String login(@RequestBody User user){
+    @GetMapping("/login")
+    public ResponseEntity<String> login(@RequestBody Userlogin user) throws UserNotFoundException {
         boolean status=userService.login(user);
         if(status){
-            return "Login SuccessFully";
+            return ResponseEntity.ok("Login SuccessFully");
         }
-        return "Enter Valid Login Details";
+        return new ResponseEntity<>("Enter Valid Login Details",HttpStatus.NOT_ACCEPTABLE);
     }
 }
