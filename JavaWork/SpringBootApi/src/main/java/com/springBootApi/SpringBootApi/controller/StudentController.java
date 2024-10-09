@@ -1,13 +1,18 @@
 package com.springBootApi.SpringBootApi.controller;
 
 import com.springBootApi.SpringBootApi.entity.Student;
+import com.springBootApi.SpringBootApi.exception.StudentNotFoundException;
 import com.springBootApi.SpringBootApi.service.StudentService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/students")
 public class StudentController {
 
     private StudentService studentService;
@@ -16,26 +21,30 @@ public class StudentController {
         this.studentService = studentService;
     }
 
-    @PostMapping("/students")
-    public Student addStudent(@RequestBody Student student){
-        return studentService.addStudent(student);
+    @PostMapping
+    public ResponseEntity<Student> addStudent(@Valid @RequestBody Student student){
+        Student createdStudent=studentService.addStudent(student);
+        return new ResponseEntity<>(createdStudent, HttpStatus.CREATED);
     }
-    @GetMapping("/students")
-    public List<Student> fetchStudents(){
-        return studentService.fetchStudents();
+    @GetMapping
+    public ResponseEntity<List<Student>> fetchStudents(){
+        List<Student> studentList=studentService.fetchStudents();
+        return ResponseEntity.ok(studentList);
     }
-    @GetMapping("/students/{id}")
-    public Student fetchStudentById(@PathVariable("id") long id){
-        return studentService.fetchStudentById(id);
+    @GetMapping("/{id}")
+    public ResponseEntity<Student> fetchStudentById(@PathVariable("id") long id) throws StudentNotFoundException {
+        Student student=studentService.fetchStudentById(id);
+        return ResponseEntity.ok(student);
     }
-    @DeleteMapping("/students/{id}")
-    public String deleteStudentById(@PathVariable("id") long id){
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteStudentById(@PathVariable("id") long id) throws StudentNotFoundException {
         studentService.deleteStudentById(id);
-        return "Student Deleted Successfully!!!";
+        return ResponseEntity.ok("Student Deleted Successfully!!!");
     }
-    @PutMapping("/students/{id}")
-    public Student updateStudent(@PathVariable long id, @RequestBody Student student){
-        return studentService.updateStudent(id, student);
+    @PutMapping("/{id}")
+    public ResponseEntity<Student> updateStudent(@PathVariable long id, @Valid @RequestBody Student student) throws StudentNotFoundException {
+        Student updatedStudent=studentService.updateStudent(id, student);
+        return ResponseEntity.ok(updatedStudent);
     }
 
 
