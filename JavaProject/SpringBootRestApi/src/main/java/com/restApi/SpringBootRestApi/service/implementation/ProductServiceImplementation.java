@@ -1,5 +1,6 @@
 package com.restApi.SpringBootRestApi.service.implementation;
 
+import com.restApi.SpringBootRestApi.dto.ProductDTO;
 import com.restApi.SpringBootRestApi.entity.Product;
 import com.restApi.SpringBootRestApi.exception.ProductNotFoundException;
 import com.restApi.SpringBootRestApi.repository.ProductRepository;
@@ -7,6 +8,8 @@ import com.restApi.SpringBootRestApi.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,13 +22,22 @@ public class ProductServiceImplementation implements ProductService {
     }
 
     @Override
-    public Product addProduct(Product product) {
-        return productRepository.save(product);
+    public ProductDTO addProduct(ProductDTO productDTO) {
+        Product product=this.mapToEntity(productDTO);
+        Product saveProduct=productRepository.save(product);
+        return this.mapToDTO(saveProduct);
     }
 
     @Override
-    public List<Product> viewAllProducts() {
-        return productRepository.findAll();
+    public List<ProductDTO> viewAllProducts() {
+        List<Product> products=productRepository.findAll();
+        List<ProductDTO> productDTOs = new ArrayList<>();
+
+        for (Product product : products) {
+            productDTOs.add(mapToDTO(product));
+        }
+
+        return productDTOs;
     }
 
     @Override
@@ -38,12 +50,17 @@ public class ProductServiceImplementation implements ProductService {
     }
 
     @Override
-    public List<Product> searchProduct(String productName) throws ProductNotFoundException {
+    public List<ProductDTO> searchProduct(String productName) throws ProductNotFoundException {
         List<Product> product=productRepository.findByName(productName);
         if(product.isEmpty()){
             throw new ProductNotFoundException("Product is not exist!!");
         }
-        return productRepository.findByName(productName);
+        List<ProductDTO> productDTOs = new ArrayList<>();
+        for (Product product1 : product) {
+            productDTOs.add(mapToDTO(product1));
+        }
+
+        return productDTOs;
     }
 
     @Override
@@ -68,5 +85,28 @@ public class ProductServiceImplementation implements ProductService {
             return 20;
         }
         return 30;
+    }
+
+    // Convert DTO to Entity
+    private Product mapToEntity(ProductDTO productDTO) {
+        return Product.builder()
+                .id(productDTO.getId())
+                .name(productDTO.getName())
+                .productType(productDTO.getProductType())
+                .productDetails(productDTO.getProductDetails())
+                .price(productDTO.getPrice())
+                .build();
+    }
+
+    // Convert Entity to DTO
+    private ProductDTO mapToDTO(Product product) {
+        return ProductDTO.builder()
+                .id(product.getId())
+                .name(product.getName())
+                .productType(product.getProductType())
+                .productDetails(product.getProductDetails())
+                .price(product.getPrice())
+                .created_date(LocalDate.parse(product.getCreated_date().toString()))
+                .build();
     }
 }

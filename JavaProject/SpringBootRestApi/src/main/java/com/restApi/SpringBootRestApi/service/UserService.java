@@ -12,5 +12,5 @@ public interface UserService {
 
     public User registerUser(UserDto userDto) throws RecordExistException;
 
-    public boolean login(Userlogin user) throws UserNotFoundException;
+    public UserDto login(Userlogin user) throws UserNotFoundException;
 }

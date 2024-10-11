@@ -46,20 +46,20 @@ public class UserServiceImplementation implements UserService {
 
 
     @Override
-    public boolean login(Userlogin user) throws UserNotFoundException {
-        Optional<User> user1 = userRepository.findById(user.getUserId());
+    public UserDto login(Userlogin user) throws UserNotFoundException {
+        Optional<User> user1 = userRepository.findByUserIdAndPassword(user.getUserId(),user.getPassword());
         if(user1.isEmpty()){
             throw new UserNotFoundException("User Not Exist!!");
         }
-        return user1.get().getPassword().equals(user.getPassword());
+        return this.userToUserDto(user1.get());
     }
 
-    public UserDto userToUserDto(User user){
+    private UserDto userToUserDto(User user){
         UserDto userDto=new UserDto();
         userDto.setUserId(user.getUserId());
         userDto.setCity(user.getCity());
         userDto.setEmail(user.getEmail());
-        userDto.setPassword(user.getPassword());
+        //userDto.setPassword(user.getPassword());
         userDto.setFirstName(user.getFirstName());
         userDto.setLastName(user.getLastName());
         userDto.setCreated_date(user.getCreated_date());
@@ -67,7 +67,7 @@ public class UserServiceImplementation implements UserService {
         return userDto;
     }
 
-    public User userDtoToUser(UserDto userDto){
+    private User userDtoToUser(UserDto userDto){
         User user=new User();
         user.setUserId(userDto.getUserId());
         user.setCity(userDto.getCity());

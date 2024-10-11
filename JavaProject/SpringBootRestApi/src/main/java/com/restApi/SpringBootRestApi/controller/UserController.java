@@ -27,11 +27,8 @@ public class UserController {
         return new ResponseEntity<>(userService.registerUser(userDto), HttpStatus.CREATED);
     }
     @GetMapping("/login")
-    public ResponseEntity<String> login(@RequestBody Userlogin user) throws UserNotFoundException {
-        boolean status=userService.login(user);
-        if(status){
-            return ResponseEntity.ok("Login SuccessFully");
-        }
-        return new ResponseEntity<>("Enter Valid Login Details",HttpStatus.NOT_ACCEPTABLE);
+    public ResponseEntity<UserDto> login(@RequestBody Userlogin user) throws UserNotFoundException {
+        UserDto userDto=userService.login(user);
+        return new ResponseEntity<>(userDto,HttpStatus.ACCEPTED);
     }
 }
