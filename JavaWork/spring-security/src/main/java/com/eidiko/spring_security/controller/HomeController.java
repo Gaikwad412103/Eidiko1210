@@ -11,4 +11,14 @@ public class HomeController {
     public ResponseEntity<String> home(){
         return ResponseEntity.ok("Welcome To The Home Page!!!");
     }
+
+    @GetMapping("/user")
+    public ResponseEntity<String> users(){
+        return ResponseEntity.ok("Hello User!!");
+    }
+
+    @GetMapping("/admin")
+    public ResponseEntity<String> admin(){
+        return ResponseEntity.ok("Hello Admin!!");
+    }
 }
