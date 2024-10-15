@@ -2,18 +2,22 @@ package com.springBootApi.SpringBootApi.controller;
 
 import com.springBootApi.SpringBootApi.entity.Student;
 import com.springBootApi.SpringBootApi.exception.StudentNotFoundException;
+import com.springBootApi.SpringBootApi.helper.FileUploderHelper;
 import com.springBootApi.SpringBootApi.service.StudentService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/students")
 public class StudentController {
+    @Autowired
+    FileUploderHelper fileUploderHelper;
 
     private StudentService studentService;
     @Autowired
@@ -46,6 +50,14 @@ public class StudentController {
         Student updatedStudent=studentService.updateStudent(id, student);
         return ResponseEntity.ok(updatedStudent);
     }
+    @PostMapping("/upload-file")
+    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile multipartFile){
+        boolean status=fileUploderHelper.uploadFile(multipartFile);
+
+        return ResponseEntity.ok("File Upload SuccessFully");
+    }
+
+
 
 
 }
