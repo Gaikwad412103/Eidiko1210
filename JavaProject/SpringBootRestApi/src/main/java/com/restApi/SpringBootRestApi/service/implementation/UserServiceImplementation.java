@@ -23,7 +23,7 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
-    public User registerUser(UserDto userDto) throws RecordExistException {
+    public UserDto registerUser(UserDto userDto) throws RecordExistException {
         Optional<User> userByEmail = userRepository.findByEmail(userDto.getEmail());
         Optional<User> userByMobileNo = userRepository.findByMobileNo(userDto.getMobileNo());
 
@@ -41,7 +41,8 @@ public class UserServiceImplementation implements UserService {
         User user = this.userDtoToUser(userDto);
 
         // Save the new user
-        return userRepository.save(user);
+        User userSaved=userRepository.save(user);
+        return this.userToUserDto(userSaved);
     }
 
 

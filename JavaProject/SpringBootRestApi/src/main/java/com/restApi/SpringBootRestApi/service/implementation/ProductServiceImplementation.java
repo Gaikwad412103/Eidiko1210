@@ -66,7 +66,7 @@ public class ProductServiceImplementation implements ProductService {
     @Override
     public int discount(long productId) throws ProductNotFoundException {
         Optional<Product> product=productRepository.findById(productId);
-        if(product.isPresent()){
+        if(product. isEmpty()){
             throw new ProductNotFoundException("Product is not exist!!");
         }
         if(product.get().getPrice()<=50){

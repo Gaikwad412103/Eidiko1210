@@ -23,8 +23,9 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<User> registerUser(@RequestBody @Valid UserDto userDto) throws RecordExistException {
-        return new ResponseEntity<>(userService.registerUser(userDto), HttpStatus.CREATED);
+    public ResponseEntity<UserDto> registerUser(@RequestBody @Valid UserDto userDto) throws RecordExistException {
+        UserDto saveUser=userService.registerUser(userDto);
+        return new ResponseEntity<>(saveUser, HttpStatus.CREATED);
     }
     @GetMapping("/login")
     public ResponseEntity<UserDto> login(@RequestBody Userlogin user) throws UserNotFoundException {
