@@ -8,6 +8,7 @@ import com.restApi.SpringBootRestApi.exception.UserNotFoundException;
 import com.restApi.SpringBootRestApi.repository.UserRepository;
 import com.restApi.SpringBootRestApi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.Option;
@@ -15,17 +16,18 @@ import java.util.Optional;
 
 @Service
 public class UserServiceImplementation implements UserService {
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     private UserRepository userRepository;
-
     @Autowired
     public UserServiceImplementation(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
     @Override
-    public UserDto registerUser(UserDto userDto) throws RecordExistException {
-        Optional<User> userByEmail = userRepository.findByEmail(userDto.getEmail());
-        Optional<User> userByMobileNo = userRepository.findByMobileNo(userDto.getMobileNo());
+    public UserDto registerUser(User user) throws RecordExistException {
+        Optional<User> userByEmail = userRepository.findByEmail(user.getEmail());
+        Optional<User> userByMobileNo = userRepository.findByMobileNo(user.getMobileNo());
 
         if (userByEmail.isPresent() && userByMobileNo.isPresent()) {
             throw new RecordExistException("Mobile no and Email already exist!!");
@@ -37,10 +39,9 @@ public class UserServiceImplementation implements UserService {
             throw new RecordExistException("Mobile no already exists!!");
         }
 
-        // Map UserDto to User entity
-        User user = this.userDtoToUser(userDto);
 
         // Save the new user
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         User userSaved=userRepository.save(user);
         return this.userToUserDto(userSaved);
     }
@@ -48,19 +49,30 @@ public class UserServiceImplementation implements UserService {
 
     @Override
     public UserDto login(Userlogin user) throws UserNotFoundException {
-        Optional<User> user1 = userRepository.findByUserIdAndPassword(user.getUserId(),user.getPassword());
-        if(user1.isEmpty()){
-            throw new UserNotFoundException("User Not Exist!!");
+        // Fetch the user based on the provided email
+        Optional<User> userOptional = userRepository.findByEmail(user.getEmail());
+
+        if (userOptional.isEmpty()) {
+            throw new UserNotFoundException("User does not exist!");
         }
-        return this.userToUserDto(user1.get());
+
+        User userEntity = userOptional.get();
+
+        // Use BCryptPasswordEncoder to match the provided password with the stored hashed password
+        if (!passwordEncoder.matches(user.getPassword(), userEntity.getPassword())) {
+            throw new UserNotFoundException("Invalid credentials!");
+        }
+
+        // Return the UserDto representation of the user entity
+        return this.userToUserDto(userEntity);
     }
+
 
     private UserDto userToUserDto(User user){
         UserDto userDto=new UserDto();
         userDto.setUserId(user.getUserId());
         userDto.setCity(user.getCity());
         userDto.setEmail(user.getEmail());
-        //userDto.setPassword(user.getPassword());
         userDto.setFirstName(user.getFirstName());
         userDto.setLastName(user.getLastName());
         userDto.setCreated_date(user.getCreated_date());
@@ -73,7 +85,6 @@ public class UserServiceImplementation implements UserService {
         user.setUserId(userDto.getUserId());
         user.setCity(userDto.getCity());
         user.setEmail(userDto.getEmail());
-        user.setPassword(userDto.getPassword());
         user.setFirstName(userDto.getFirstName());
         user.setMobileNo(userDto.getMobileNo());
         user.setLastName(userDto.getLastName());

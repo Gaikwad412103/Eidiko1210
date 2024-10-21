@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class Userlogin {
     @NotNull(message = "not null is not allowed")
-    private long userId;
+    private String email;
     @NotNull(message = "not null is not allowed")
     private String password;
 }

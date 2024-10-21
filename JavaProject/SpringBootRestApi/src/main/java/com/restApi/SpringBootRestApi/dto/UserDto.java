@@ -28,9 +28,7 @@ public class UserDto {
     @Pattern(regexp = "^\\d{10}$",message = "mobile no is not valid")
     private String mobileNo;
     private String city;
-    @NotNull(message = "Password cannot be null")
-    @Size(min = 3,max = 16,message = "Password must be between 3 to 16 character")
-    private String password;
     @CreationTimestamp
     private LocalDate created_date;
+    private String token;
 }

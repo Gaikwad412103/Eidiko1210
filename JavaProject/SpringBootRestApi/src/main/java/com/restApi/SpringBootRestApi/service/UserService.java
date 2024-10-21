@@ -10,7 +10,7 @@ public interface UserService {
 
 
 
-    public UserDto registerUser(UserDto userDto) throws RecordExistException;
+    public UserDto registerUser(User user) throws RecordExistException;
 
     public UserDto login(Userlogin user) throws UserNotFoundException;
 }
