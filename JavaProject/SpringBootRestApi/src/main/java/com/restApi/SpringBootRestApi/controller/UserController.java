@@ -7,6 +7,7 @@ import com.restApi.SpringBootRestApi.exception.RecordExistException;
 import com.restApi.SpringBootRestApi.exception.UserNotFoundException;
 import com.restApi.SpringBootRestApi.service.UserService;
 import com.restApi.SpringBootRestApi.service.implementation.JwtService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,7 +18,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
-
+@Tag(
+        name = "User",
+        description = "Login & Registrations Endpoints"
+)
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -39,7 +43,7 @@ public class UserController {
         UserDto saveUser=userService.registerUser(user);
         return new ResponseEntity<>(saveUser, HttpStatus.CREATED);
     }
-    @GetMapping("/login")
+    @PostMapping("/login")
     public ResponseEntity<UserDto> login(@RequestBody Userlogin user) throws UserNotFoundException {
         try {
             // Authenticate the user with the provided email and password
