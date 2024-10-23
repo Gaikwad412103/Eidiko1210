@@ -1,5 +1,6 @@
 package com.restApi.SpringBootRestApi.service.implementation;
 
+import com.restApi.SpringBootRestApi.dto.ProductAddRequest;
 import com.restApi.SpringBootRestApi.dto.ProductDTO;
 import com.restApi.SpringBootRestApi.entity.Product;
 import com.restApi.SpringBootRestApi.exception.ProductNotFoundException;
@@ -22,7 +23,7 @@ public class ProductServiceImplementation implements ProductService {
     }
 
     @Override
-    public ProductDTO addProduct(ProductDTO productDTO) {
+    public ProductDTO addProduct(ProductAddRequest productDTO) {
         Product product=this.mapToEntity(productDTO);
         Product saveProduct=productRepository.save(product);
         return this.mapToDTO(saveProduct);
@@ -88,9 +89,8 @@ public class ProductServiceImplementation implements ProductService {
     }
 
     // Convert DTO to Entity
-    private Product mapToEntity(ProductDTO productDTO) {
+    private Product mapToEntity(ProductAddRequest productDTO) {
         return Product.builder()
-                .id(productDTO.getId())
                 .name(productDTO.getName())
                 .productType(productDTO.getProductType())
                 .productDetails(productDTO.getProductDetails())

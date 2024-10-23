@@ -1,5 +1,6 @@
 package com.restApi.SpringBootRestApi.service;
 
+import com.restApi.SpringBootRestApi.dto.RegistrationRequest;
 import com.restApi.SpringBootRestApi.dto.UserDto;
 import com.restApi.SpringBootRestApi.dto.Userlogin;
 import com.restApi.SpringBootRestApi.entity.User;
@@ -10,7 +11,7 @@ public interface UserService {
 
 
 
-    public UserDto registerUser(User user) throws RecordExistException;
+    public UserDto registerUser(RegistrationRequest user) throws RecordExistException;
 
     public UserDto login(Userlogin user) throws UserNotFoundException;
 }

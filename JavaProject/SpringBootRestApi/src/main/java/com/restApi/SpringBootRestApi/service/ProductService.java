@@ -1,12 +1,13 @@
 package com.restApi.SpringBootRestApi.service;
 
+import com.restApi.SpringBootRestApi.dto.ProductAddRequest;
 import com.restApi.SpringBootRestApi.dto.ProductDTO;
 import com.restApi.SpringBootRestApi.exception.ProductNotFoundException;
 
 import java.util.List;
 
 public interface ProductService {
-    public ProductDTO addProduct(ProductDTO product);
+    public ProductDTO addProduct(ProductAddRequest product);
 
     public List<ProductDTO> viewAllProducts();
 

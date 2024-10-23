@@ -1,5 +1,6 @@
 package com.restApi.SpringBootRestApi.controller;
 
+import com.restApi.SpringBootRestApi.dto.RegistrationRequest;
 import com.restApi.SpringBootRestApi.dto.UserDto;
 import com.restApi.SpringBootRestApi.dto.Userlogin;
 import com.restApi.SpringBootRestApi.entity.User;
@@ -7,6 +8,7 @@ import com.restApi.SpringBootRestApi.exception.RecordExistException;
 import com.restApi.SpringBootRestApi.exception.UserNotFoundException;
 import com.restApi.SpringBootRestApi.service.UserService;
 import com.restApi.SpringBootRestApi.service.implementation.JwtService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,12 +39,17 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
-
+    @Operation(
+            summary = "Adding New User"
+    )
     @PostMapping("/register")
-    public ResponseEntity<UserDto> registerUser(@RequestBody @Valid User user) throws RecordExistException {
+    public ResponseEntity<UserDto> registerUser(@RequestBody @Valid RegistrationRequest user) throws RecordExistException {
         UserDto saveUser=userService.registerUser(user);
         return new ResponseEntity<>(saveUser, HttpStatus.CREATED);
     }
+    @Operation(
+            summary = "Login User By UserName & Password"
+    )
     @PostMapping("/login")
     public ResponseEntity<UserDto> login(@RequestBody Userlogin user) throws UserNotFoundException {
         try {

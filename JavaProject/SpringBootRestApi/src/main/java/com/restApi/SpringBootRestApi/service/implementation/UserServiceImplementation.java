@@ -1,5 +1,6 @@
 package com.restApi.SpringBootRestApi.service.implementation;
 
+import com.restApi.SpringBootRestApi.dto.RegistrationRequest;
 import com.restApi.SpringBootRestApi.dto.UserDto;
 import com.restApi.SpringBootRestApi.dto.Userlogin;
 import com.restApi.SpringBootRestApi.entity.User;
@@ -25,7 +26,7 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
-    public UserDto registerUser(User user) throws RecordExistException {
+    public UserDto registerUser(RegistrationRequest user) throws RecordExistException {
         Optional<User> userByEmail = userRepository.findByEmail(user.getEmail());
         Optional<User> userByMobileNo = userRepository.findByMobileNo(user.getMobileNo());
 
@@ -41,8 +42,10 @@ public class UserServiceImplementation implements UserService {
 
 
         // Save the new user
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        User userSaved=userRepository.save(user);
+        User createUser=this.userDtoToUser(user);
+
+        User userSaved=userRepository.save(createUser);
+
         return this.userToUserDto(userSaved);
     }
 
@@ -80,15 +83,15 @@ public class UserServiceImplementation implements UserService {
         return userDto;
     }
 
-    private User userDtoToUser(UserDto userDto){
+    private User userDtoToUser(RegistrationRequest userDto){
         User user=new User();
-        user.setUserId(userDto.getUserId());
         user.setCity(userDto.getCity());
         user.setEmail(userDto.getEmail());
         user.setFirstName(userDto.getFirstName());
         user.setMobileNo(userDto.getMobileNo());
         user.setLastName(userDto.getLastName());
-        user.setCreated_date(userDto.getCreated_date());
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        user.setRoles(userDto.getRoles());
         return user;
     }
 }
