@@ -43,6 +43,7 @@ public class UserServiceImplementation implements UserService {
 
         // Save the new user
         User createUser=this.userDtoToUser(user);
+        createUser.setPassword(passwordEncoder.encode(createUser.getPassword()));
 
         User userSaved=userRepository.save(createUser);
 
